@@ -1,90 +1,82 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f0f4f8;
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
   margin: 0;
   padding: 0;
 }
 
 .container {
   max-width: 700px;
-  margin: 40px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  margin: 50px auto;
+  padding: 0 20px;
 }
 
-h1, h2 {
+.card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 30px;
+  margin-bottom: 20px;
+}
+
+h1, h2, h4 {
   text-align: center;
   color: #333;
 }
 
-p {
-  text-align: center;
-  font-size: 1.1em;
-}
-
 .landing-image {
   display: block;
-  max-width: 100%;
   margin: 20px auto;
-  border-radius: 12px;
+  max-width: 100%;
+  width: 300px;
+  height: auto;
+  border-radius: 15px;
 }
 
 button {
-  display: inline-block;
-  padding: 12px 25px;
-  margin: 10px 5px 0 0;
+  display: block;
+  margin: 20px auto;
+  padding: 10px 25px;
+  font-size: 16px;
   border: none;
   border-radius: 8px;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 1em;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 button:hover {
-  background-color: #45a049;
+  opacity: 0.9;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
+.btn-primary { background: #007bff; color: #fff; }
+.btn-success { background: #28a745; color: #fff; }
 
 .hidden { display: none; }
 
-.question { 
-  font-size: 1.2em; 
-  margin-bottom: 20px; 
-  font-weight: 500;
-}
-
 .option {
   display: block;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 12px;
+  margin: 10px 0;
   padding: 12px;
-  background: #e8eaf6;
+  font-size: 15px;
   border-radius: 8px;
+  border: 1px solid #ccc;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
-  border: 1px solid #c5cae9;
-  color: #1a1a1a;
-  font-weight: 500;
+  background: #f8f9fa;
 }
 
-.option:hover:not(:disabled) {
-  background: #d1d9ff;
+.option:hover {
+  background: #e2e6ea;
   transform: scale(1.02);
 }
 
-.option:disabled {
-  background: #f0f0f0;
-  color: #999;
-  cursor: not-allowed;
+.option input[type="radio"] {
+  margin-right: 10px;
+}
+
+.summary-question {
+  margin-bottom: 10px;
+  text-align: left;
 }
 
 .feedback {
@@ -102,19 +94,6 @@ button:disabled {
   text-align: center;
 }
 
-.summary-question {
-  text-align: left;
-  margin-bottom: 10px;
-}
-
 #results button {
   margin-top: 20px;
-}
-
-.landing-image {
-  display: block;
-  max-width: 50%;   
-  height: auto;
-  margin: 20px auto;
-  border-radius: 12px;
 }

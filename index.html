@@ -10,31 +10,29 @@
 <div class="container">
 
   <!-- Landing Page -->
-  <div id="landingPage">
+  <div id="landingPage" class="card">
     <h1>🌟 Welcome to QuizMaster!</h1>
-    <p>Test your knowledge with this fun quiz! One question at a time. Try your best and see your final score!</p>
-    <img src="assets/quiz_image.png" alt="Quiz" class="landing-image">
-    <button id="startBtn">Quiz Me</button>
+    <p style="text-align:center;">Test your knowledge with this fun quiz! One question at a time. Try your best and see your final score!</p>
+    <img src="www/quiz_image.png" alt="Quiz" class="landing-image">
+    <button id="startBtn" class="btn-primary">Start Quiz</button>
   </div>
 
   <!-- Quiz Container -->
   <div id="quizContainer" class="hidden">
-    <div id="questionContainer" class="question"></div>
-    <div id="optionsContainer"></div>
-    <div id="feedback" class="feedback"></div>
-    <button id="nextBtn" class="hidden">Next</button>
+    <div id="questionContainer" class="card"></div>
+    <form id="optionsContainer" class="card"></form>
+    <button id="nextBtn" class="hidden btn-success">Next</button>
   </div>
 
   <!-- Results Container -->
-  <div id="results" class="hidden"></div>
+  <div id="results" class="hidden card"></div>
 
 </div>
 
 <script>
-// Variables
+// ------------------ Variables ------------------
 let questions = [];
 let currentQ = 0;
-let score = 0;
 let userAnswers = [];
 
 const landingPage = document.getElementById('landingPage');
@@ -42,106 +40,101 @@ const startBtn = document.getElementById('startBtn');
 const quizContainer = document.getElementById('quizContainer');
 const questionContainer = document.getElementById('questionContainer');
 const optionsContainer = document.getElementById('optionsContainer');
-const feedback = document.getElementById('feedback');
 const nextBtn = document.getElementById('nextBtn');
 const results = document.getElementById('results');
 
-// Load questions from JSON
-fetch('questions.json')
-  .then(response => response.json())
-  .then(data => {
-    questions = data;
-  })
-  .catch(err => {
-    console.error("Failed to load questions.json", err);
-  });
+// ------------------ Questions ------------------
+questions = [
+  { text: "What is the capital of France?", options: ["Paris", "London", "Berlin", "Madrid"], correct: "Paris" },
+  { text: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], correct: "Mars" },
+  { text: "What is 5 + 7?", options: ["10", "11", "12", "13"], correct: "12" }
+];
 
-// Start quiz
+// ------------------ Start Quiz ------------------
 startBtn.addEventListener('click', () => {
-  if (questions.length === 0) {
-    alert("Quiz questions not loaded yet!");
-    return;
-  }
   landingPage.classList.add('hidden');
   quizContainer.classList.remove('hidden');
   showQuestion();
 });
 
+// ------------------ Show Question ------------------
 function showQuestion() {
   const q = questions[currentQ];
-  questionContainer.textContent = `Question ${currentQ + 1}: ${q.text}`;
+  questionContainer.innerHTML = `<h4>Question ${currentQ + 1} of ${questions.length}</h4><p>${q.text}</p>`;
   optionsContainer.innerHTML = '';
-  feedback.textContent = '';
-  feedback.className = 'feedback';
   nextBtn.classList.add('hidden');
 
   q.options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.textContent = opt;
-    btn.className = 'option';
-    btn.addEventListener('click', () => selectAnswer(opt));
-    optionsContainer.appendChild(btn);
+    const label = document.createElement('label');
+    label.className = 'option';
+    label.innerHTML = `<input type="radio" name="answer" value="${opt}"> ${opt}`;
+    optionsContainer.appendChild(label);
+  });
+
+  // Enable Next button only if a radio is selected
+  const radios = optionsContainer.querySelectorAll('input[type=radio]');
+  radios.forEach(r => {
+    r.addEventListener('change', () => {
+      nextBtn.classList.remove('hidden');
+    });
   });
 }
 
-function selectAnswer(answer) {
-  const q = questions[currentQ];
-  userAnswers.push(answer);
-
-  if(answer === q.correct) {
-    feedback.textContent = '✅ Correct!';
-    feedback.className = 'feedback correct';
-    score++;
-  } else {
-    feedback.textContent = `❌ Incorrect! Correct answer: ${q.correct}`;
-    feedback.className = 'feedback incorrect';
-  }
-
-  Array.from(optionsContainer.children).forEach(b => b.disabled = true);
-  nextBtn.classList.remove('hidden');
-}
-
+// ------------------ Next Question ------------------
 nextBtn.addEventListener('click', () => {
+  const selected = optionsContainer.querySelector('input[name="answer"]:checked');
+  if(!selected) return; // Safety check
+  userAnswers.push(selected.value);
+
   currentQ++;
-  if(currentQ < questions.length) {
+  if(currentQ < questions.length){
     showQuestion();
+    nextBtn.classList.add('hidden'); // hide Next until a selection is made
   } else {
     showResults();
   }
 });
 
+// ------------------ Show Results ------------------
 function showResults() {
   quizContainer.classList.add('hidden');
   results.classList.remove('hidden');
 
+  let score = 0;
   let html = `<h2>📊 Quiz Results</h2>
-              <p>Your Score: ${score} / ${questions.length}</p>`;
+              <p style="text-align:center;">Your Score: `;
+
+  userAnswers.forEach((ans, i) => {
+    if(ans === questions[i].correct) score++;
+  });
+  html += `${score} / ${questions.length}</p>`;
 
   questions.forEach((q, i) => {
     const userAns = userAnswers[i];
+    const color = userAns === q.correct ? "green" : "red";
+    const icon = userAns === q.correct ? "✅" : "❌";
     html += `<div class="summary-question">
                <strong>Q${i+1}:</strong> ${q.text}<br>
-               Your answer: <strong>${userAns}</strong> | Correct: <strong>${q.correct}</strong>
+               ${icon} Your answer: <strong style="color:${color};">${userAns}</strong> | Correct: <strong>${q.correct}</strong>
              </div><hr>`;
   });
 
   if(score === questions.length){
-    html += "<p>🏆 Quiz Master! Perfect score!</p>";
+    html += "<p style='text-align:center; font-weight:bold;'>🏆 Quiz Master! Perfect score!</p>";
   } else if(score === 0){
-    html += "<p>😅 No correct answers. Better luck next time!</p>";
-  } else if(score <= Math.floor(questions.length / 2)){
-    html += "<p>🤔 Room to improve. Keep trying!</p>";
+    html += "<p style='text-align:center; font-weight:bold;'>😅 No correct answers. Better luck next time!</p>";
+  } else if(score <= Math.floor(questions.length/2)){
+    html += "<p style='text-align:center; font-weight:bold;'>🤔 Room to improve. Keep trying!</p>";
   } else {
-    html += "<p>👍 Good job! Almost there!</p>";
+    html += "<p style='text-align:center; font-weight:bold;'>👍 Good job! Almost there!</p>";
   }
 
-  html += `<button id="restartBtn">Restart Quiz</button>`;
+  html += `<button id="restartBtn" class="btn-primary">Restart Quiz</button>`;
   results.innerHTML = html;
 
   document.getElementById('restartBtn').addEventListener('click', () => location.reload());
 }
 </script>
-
 
 </body>
 </html>
