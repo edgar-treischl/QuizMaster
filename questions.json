@@ -1,0 +1,17 @@
+[
+  {
+    "text": "What is the capital of France?",
+    "options": ["Paris", "London", "Berlin", "Madrid"],
+    "correct": "Paris"
+  },
+  {
+    "text": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Mars", "Jupiter", "Venus"],
+    "correct": "Mars"
+  },
+  {
+    "text": "What is 7 + 7?",
+    "options": ["17", "14", "12", "13"],
+    "correct": "14"
+  }
+]

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🌟 QuizMaster!</title>
+<link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Landing Page -->
+  <div id="landingPage">
+    <h1>🌟 Welcome to QuizMaster!</h1>
+    <p>Test your knowledge with this fun quiz! One question at a time. Try your best and see your final score!</p>
+    <img src="assets/quiz_image.png" alt="Quiz" class="landing-image">
+    <button id="startBtn">Start Quiz</button>
+  </div>
+
+  <!-- Quiz Container -->
+  <div id="quizContainer" class="hidden">
+    <div id="questionContainer" class="question"></div>
+    <div id="optionsContainer"></div>
+    <div id="feedback" class="feedback"></div>
+    <button id="nextBtn" class="hidden">Next</button>
+  </div>
+
+  <!-- Results Container -->
+  <div id="results" class="hidden"></div>
+
+</div>
+
+<script>
+// Variables
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let userAnswers = [];
+
+const landingPage = document.getElementById('landingPage');
+const startBtn = document.getElementById('startBtn');
+const quizContainer = document.getElementById('quizContainer');
+const questionContainer = document.getElementById('questionContainer');
+const optionsContainer = document.getElementById('optionsContainer');
+const feedback = document.getElementById('feedback');
+const nextBtn = document.getElementById('nextBtn');
+const results = document.getElementById('results');
+
+// Load questions from JSON
+fetch('questions.json')
+  .then(response => response.json())
+  .then(data => {
+    questions = data;
+  })
+  .catch(err => {
+    console.error("Failed to load questions.json", err);
+  });
+
+// Start quiz
+startBtn.addEventListener('click', () => {
+  if (questions.length === 0) {
+    alert("Quiz questions not loaded yet!");
+    return;
+  }
+  landingPage.classList.add('hidden');
+  quizContainer.classList.remove('hidden');
+  showQuestion();
+});
+
+function showQuestion() {
+  const q = questions[currentQ];
+  questionContainer.textContent = `Question ${currentQ + 1}: ${q.text}`;
+  optionsContainer.innerHTML = '';
+  feedback.textContent = '';
+  feedback.className = 'feedback';
+  nextBtn.classList.add('hidden');
+
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.className = 'option';
+    btn.addEventListener('click', () => selectAnswer(opt));
+    optionsContainer.appendChild(btn);
+  });
+}
+
+function selectAnswer(answer) {
+  const q = questions[currentQ];
+  userAnswers.push(answer);
+
+  if(answer === q.correct) {
+    feedback.textContent = '✅ Correct!';
+    feedback.className = 'feedback correct';
+    score++;
+  } else {
+    feedback.textContent = `❌ Incorrect! Correct answer: ${q.correct}`;
+    feedback.className = 'feedback incorrect';
+  }
+
+  Array.from(optionsContainer.children).forEach(b => b.disabled = true);
+  nextBtn.classList.remove('hidden');
+}
+
+nextBtn.addEventListener('click', () => {
+  currentQ++;
+  if(currentQ < questions.length) {
+    showQuestion();
+  } else {
+    showResults();
+  }
+});
+
+function showResults() {
+  quizContainer.classList.add('hidden');
+  results.classList.remove('hidden');
+
+  let html = `<h2>📊 Quiz Results</h2>
+              <p>Your Score: ${score} / ${questions.length}</p>`;
+
+  questions.forEach((q, i) => {
+    const userAns = userAnswers[i];
+    html += `<div class="summary-question">
+               <strong>Q${i+1}:</strong> ${q.text}<br>
+               Your answer: <strong>${userAns}</strong> | Correct: <strong>${q.correct}</strong>
+             </div><hr>`;
+  });
+
+  if(score === questions.length){
+    html += "<p>🏆 Quiz Master! Perfect score!</p>";
+  } else if(score === 0){
+    html += "<p>😅 No correct answers. Better luck next time!</p>";
+  } else if(score <= Math.floor(questions.length / 2)){
+    html += "<p>🤔 Room to improve. Keep trying!</p>";
+  } else {
+    html += "<p>👍 Good job! Almost there!</p>";
+  }
+
+  html += `<button id="restartBtn">Restart Quiz</button>`;
+  results.innerHTML = html;
+
+  document.getElementById('restartBtn').addEventListener('click', () => location.reload());
+}
+</script>
+
+
+</body>
+</html>

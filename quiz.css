@@ -1,0 +1,120 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+}
+
+p {
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.landing-image {
+  display: block;
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 12px;
+}
+
+button {
+  display: inline-block;
+  padding: 12px 25px;
+  margin: 10px 5px 0 0;
+  border: none;
+  border-radius: 8px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.hidden { display: none; }
+
+.question { 
+  font-size: 1.2em; 
+  margin-bottom: 20px; 
+  font-weight: 500;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #e8eaf6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  border: 1px solid #c5cae9;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.option:hover:not(:disabled) {
+  background: #d1d9ff;
+  transform: scale(1.02);
+}
+
+.option:disabled {
+  background: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.feedback {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.correct { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.incorrect { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+#results {
+  text-align: center;
+}
+
+.summary-question {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+#results button {
+  margin-top: 20px;
+}
+
+.landing-image {
+  display: block;
+  max-width: 50%;   /* shrink image to 50% of container width */
+  height: auto;      /* maintain aspect ratio */
+  margin: 20px auto;
+  border-radius: 12px;
+}
