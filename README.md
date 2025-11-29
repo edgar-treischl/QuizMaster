@@ -22,3 +22,8 @@ streamlit run quiz_app.py
 source quiz_env/bin/activate
 pip install jupyter ipywidgets pyyaml
 ```
+
+
+```
+pgzrun game.py
+```
