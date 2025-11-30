@@ -45,7 +45,7 @@ def server(input, output, session: session.Session):
             return ui.div(
                 ui.div(
                     ui.img(
-                        src="quiz_image.png",  # <-- must be in www/
+                        src="quiz_image.png",
                         style="width:250px; display:block; margin:auto; border-radius:10px;"
                     ),
                     ui.p(
